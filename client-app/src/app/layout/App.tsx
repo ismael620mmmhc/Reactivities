@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import{ useEffect, useState } from 'react';
 import { Container} from 'semantic-ui-react';
 import { Activity } from '../models/activity';
 import NavBar from './NavBar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
 import {v4 as uuid} from 'uuid';
-import { act } from 'react-dom/test-utils';
 import agent from '../api/agent';
 import LoadingComponent from './LoadingComponent';
 
@@ -67,8 +65,12 @@ function App() {
     }
   }
 
-   function handleDeleteActivity(id?: string){
-    setActivities([...activities.filter(x => x.id !== id)])
+   function handleDeleteActivity(id: string){
+      setSubmitting(true);
+      agent.Activities.delete(id).then(() => {
+        setActivities([...activities.filter(x => x.id !== id)])
+        setSubmitting(false);
+      })
    }
 
   if (loading) return <LoadingComponent content = 'Loading app ...'/>
